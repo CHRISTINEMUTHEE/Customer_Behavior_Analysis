@@ -1,0 +1,12 @@
+---
+title: "Customer_Behavior"
+author: "Christine Muthee"
+date: "11/26/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
