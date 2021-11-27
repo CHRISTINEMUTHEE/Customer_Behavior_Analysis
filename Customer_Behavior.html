@@ -176,18 +176,35 @@ pre code {
 <h1>Kira Plastinina Product analysis</h1>
 <div id="objective" class="section level2">
 <h2>1.Objective:</h2>
-<div id="a.understanding-customer-behavior." class="section level3">
-<h3>a.)Understanding Customer Behavior.</h3>
+<div id="a.-understanding-customer-behavior." class="section level3">
+<h3>a.) Understanding Customer Behavior.</h3>
 </div>
 <div id="b.-understanding-the-characteristics-of-customer-groups." class="section level3">
 <h3>b.) Understanding the characteristics of customer groups.</h3>
 </div>
 </div>
-<div id="problem-statement" class="section level2">
-<h2>2.Problem Statement</h2>
+<div id="problem-statement." class="section level2">
+<h2>2.Problem Statement.</h2>
 <div id="businesses-in-this-day-and-time-have-learnt-the-power-of-leveraging-data-for-product-optimization-and-also-to-channel-resources-where-they-are-needed.-unorthodox-methods-of-marketing-and-assessing-customer-behavior-based-on-gut-feeling-and-guesses-have-led-to-losses-in-companies-and-also-many-have-lost-customers-to-companies-that-understand-their-customers-in-a-deeper-level.in-this-scope-of-analysis-we-will-delve-in-understanding-customer-behavior-and-cluster-them-to-groups-for-optimum-product-development-through-effective-marketing-strategies." class="section level4">
 <h4>Businesses in this day and time have learnt the power of leveraging data for product optimization and also to channel resources where they are needed. Unorthodox methods of marketing and assessing customer behavior based on gut feeling and guesses have led to losses in companies and also many have lost customers to companies that understand their customers in a deeper level.In this scope of analysis we will delve in understanding customer behavior and cluster them to groups for optimum product development through effective marketing strategies.</h4>
-<pre class="r"><code>library(data.table)
+</div>
+</div>
+<div id="data-sourcing." class="section level2">
+<h2>3.) Data Sourcing.</h2>
+<div id="this-data-was-sourced-from-kira-plastinas-ecommerce-website-as-the-product-is-sold-through-a-chain-of-retail-stores-in-russiaukrainekazakhstanbelaruschinsphilipines-and-armenia." class="section level4">
+<h4>This data was sourced from kira Plastina’s ecommerce website as the product is sold through a chain of retail stores in Russia,Ukraine,Kazakhstan,Belarus,Chins,Philipines and Armenia.</h4>
+</div>
+</div>
+<div id="experimental-design" class="section level2">
+<h2>4. Experimental Design</h2>
+<div id="this-scope-of-analysis-will-involve-reviewing-data-to-inspect-its-fittness-to-carry-out-analysis.-this-will-later-be-followed-by-a-deep-analysis-of-the-variables-present-in-our-data-while-understanding-customers-behaviour-from-these-results.-the-solution-will-finaly-be-implemented-by-segemting-the-customers-into-similar-clusters-and-reviewing-the-unique-characteristics-of-these-groups." class="section level3">
+<h3>This scope of analysis will involve reviewing data to inspect its fittness to carry out analysis. This will later be followed by a deep analysis of the variables present in our data while understanding customers behaviour from these results. The solution will finaly be implemented by segemting the customers into similar clusters and reviewing the unique characteristics of these groups.</h3>
+</div>
+</div>
+<div id="checking-the-data." class="section level2">
+<h2>5.) Checking the data.</h2>
+<pre class="r"><code># Viewing the data structures and its constituents
+library(data.table)
 customer_df&lt;-fread(&quot;http://bit.ly/EcommerceCustomersDataset&quot;)
 head(customer_df)</code></pre>
 <pre><code>##    Administrative Administrative_Duration Informational Informational_Duration
@@ -218,7 +235,74 @@ head(customer_df)</code></pre>
 ## 4: Returning_Visitor   FALSE   FALSE
 ## 5: Returning_Visitor    TRUE   FALSE
 ## 6: Returning_Visitor   FALSE   FALSE</code></pre>
+<pre class="r"><code># The data is comprised of 10 numerical and 8 categorical variables. In them contains the nature of their operation in the e commerce website.</code></pre>
+<pre class="r"><code>str(customer_df)</code></pre>
+<pre><code>## Classes &#39;data.table&#39; and &#39;data.frame&#39;:   12330 obs. of  18 variables:
+##  $ Administrative         : int  0 0 0 0 0 0 0 1 0 0 ...
+##  $ Administrative_Duration: num  0 0 -1 0 0 0 -1 -1 0 0 ...
+##  $ Informational          : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Informational_Duration : num  0 0 -1 0 0 0 -1 -1 0 0 ...
+##  $ ProductRelated         : int  1 2 1 2 10 19 1 1 2 3 ...
+##  $ ProductRelated_Duration: num  0 64 -1 2.67 627.5 ...
+##  $ BounceRates            : num  0.2 0 0.2 0.05 0.02 ...
+##  $ ExitRates              : num  0.2 0.1 0.2 0.14 0.05 ...
+##  $ PageValues             : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ SpecialDay             : num  0 0 0 0 0 0 0.4 0 0.8 0.4 ...
+##  $ Month                  : chr  &quot;Feb&quot; &quot;Feb&quot; &quot;Feb&quot; &quot;Feb&quot; ...
+##  $ OperatingSystems       : int  1 2 4 3 3 2 2 1 2 2 ...
+##  $ Browser                : int  1 2 1 2 3 2 4 2 2 4 ...
+##  $ Region                 : int  1 1 9 2 1 1 3 1 2 1 ...
+##  $ TrafficType            : int  1 2 3 4 4 3 3 5 3 2 ...
+##  $ VisitorType            : chr  &quot;Returning_Visitor&quot; &quot;Returning_Visitor&quot; &quot;Returning_Visitor&quot; &quot;Returning_Visitor&quot; ...
+##  $ Weekend                : logi  FALSE FALSE FALSE FALSE TRUE FALSE ...
+##  $ Revenue                : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...
+##  - attr(*, &quot;.internal.selfref&quot;)=&lt;externalptr&gt;</code></pre>
+<pre class="r"><code># Checking the dimension of my dataset
+dim(customer_df)</code></pre>
+<pre><code>## [1] 12330    18</code></pre>
+<pre class="r"><code># My dataset has 12330 rows and 18 columns.</code></pre>
 </div>
+<div id="cleaning-data" class="section level2">
+<h2>6.) Cleaning data</h2>
+<pre class="r"><code># Duplicated values
+length(which(duplicated.data.frame(customer_df)))</code></pre>
+<pre><code>## [1] 119</code></pre>
+<pre class="r"><code># 119 rows are duplicated</code></pre>
+<pre class="r"><code># Dealing with duplicated rows
+customer_df&lt;-customer_df[!duplicated(customer_df),]
+head(customer_df)</code></pre>
+<pre><code>##    Administrative Administrative_Duration Informational Informational_Duration
+## 1:              0                       0             0                      0
+## 2:              0                       0             0                      0
+## 3:              0                      -1             0                     -1
+## 4:              0                       0             0                      0
+## 5:              0                       0             0                      0
+## 6:              0                       0             0                      0
+##    ProductRelated ProductRelated_Duration BounceRates ExitRates PageValues
+## 1:              1                0.000000  0.20000000 0.2000000          0
+## 2:              2               64.000000  0.00000000 0.1000000          0
+## 3:              1               -1.000000  0.20000000 0.2000000          0
+## 4:              2                2.666667  0.05000000 0.1400000          0
+## 5:             10              627.500000  0.02000000 0.0500000          0
+## 6:             19              154.216667  0.01578947 0.0245614          0
+##    SpecialDay Month OperatingSystems Browser Region TrafficType
+## 1:          0   Feb                1       1      1           1
+## 2:          0   Feb                2       2      1           2
+## 3:          0   Feb                4       1      9           3
+## 4:          0   Feb                3       2      2           4
+## 5:          0   Feb                3       3      1           4
+## 6:          0   Feb                2       2      1           3
+##          VisitorType Weekend Revenue
+## 1: Returning_Visitor   FALSE   FALSE
+## 2: Returning_Visitor   FALSE   FALSE
+## 3: Returning_Visitor   FALSE   FALSE
+## 4: Returning_Visitor   FALSE   FALSE
+## 5: Returning_Visitor    TRUE   FALSE
+## 6: Returning_Visitor   FALSE   FALSE</code></pre>
+<pre class="r"><code># Confirming the operation
+length(which(duplicated.data.frame(customer_df)))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code># No duplicated values present</code></pre>
 </div>
 </div>
 

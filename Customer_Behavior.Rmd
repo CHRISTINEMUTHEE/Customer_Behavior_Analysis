@@ -12,17 +12,169 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## 1.Objective: 
 
-### a.)Understanding Customer Behavior.
+### a.) Understanding Customer Behavior.
 ### b.) Understanding the characteristics of customer groups.
 
-## 2.Problem Statement
+## 2.Problem Statement.
 
 #### Businesses in this day and time have learnt the power of leveraging data for product optimization and also to channel resources where they are needed. Unorthodox methods of marketing and assessing customer behavior based on gut feeling and guesses have led to losses in companies and also many have lost customers to companies that understand their customers in a deeper level.In this scope of analysis we will delve in understanding customer behavior and cluster them to groups for optimum product development through effective marketing strategies.
 
+## 3.) Data Sourcing. 
+
+#### This data was sourced from kira Plastina's ecommerce website as the product is sold through a chain of retail stores in Russia,Ukraine,Kazakhstan,Belarus,Chins,Philipines and Armenia. 
+
+## 4. Experimental Design
+#### This scope of analysis will involve reviewing data to inspect its fittness to carry out analysis. This will later be followed by a deep analysis of the variables present in our data while understanding customers behaviour from these results. The solution will finaly be implemented by segemting the customers into similar clusters and reviewing the unique characteristics of these groups.
+
+## 5.) Checking the data.
+
 ```{r}
+# Viewing the data structures and its constituents
 library(data.table)
 customer_df<-fread("http://bit.ly/EcommerceCustomersDataset")
 head(customer_df)
+# The data is comprised of 10 numerical and 8 categorical variables. In them contains the nature of their operation in the e commerce website.
 ```
+
+```{r}
+str(customer_df)
+```
+```{r}
+# Checking the dimension of my dataset
+dim(customer_df)
+# My dataset has 12330 rows and 18 columns.
+```
+```{r}
+
+
+```
+
+## 6.) Cleaning data
+
+### Duplicated values
+
+```{r}
+# Duplicated values
+length(which(duplicated.data.frame(customer_df)))
+# 119 rows are duplicated
+```
+```{r}
+# Dealing with duplicated rows
+customer_df<-customer_df[!duplicated(customer_df),]
+head(customer_df)
+```
+```{r}
+# Confirming the operation
+length(which(duplicated.data.frame(customer_df)))
+# No duplicated values present
+```
+## Missing values
+
+```{r}
+# Checking for missing values
+length(which(is.na.data.frame(customer_df)))
+# We have 96 missing values
+```
+Checking specific columns with the missing values
+
+```{r}
+# Checking the  missing number count
+customer_df[!complete.cases(customer_df),]
+# the are quite a lot to get rid off and they carry much data involving site information
+```
+#### Using the mice function to get a better understanding of missing data.
+```{r}
+library(mice)
+md.pattern(customer_df,plot = TRUE,rotate.names = TRUE)
+# We get to understand that there are a total of 96 missing values in the dataset and they are mainly found in the administrative,Informational,product related ,bounce rates and exit rates sites. Their proportions also are similar in magnitude.
+```
+
+Imputing them using the mice function
+```{r}
+# Assessing the imputation methods for mice
+methods(mice)
+```
+ Imputing using the mice function
+```{r}
+# Using random forest as the imputation method as most of our missing values are discrete
+customer_df_full<-mice(customer_df,m=5,
+                       method="rf",
+                       maxit = 50,seed = 500)
+```
+```{r}
+# Getting a summary of the full set
+summary(customer_df_full) 
+# The imputation was successful with five complete datasets using random forest method.
+```
+# Getting the first dataset and visualizing the imputed values against my observed values to check for plausibility of the imputations
+```{r}
+complete_df<-complete(customer_df_full,1)
+# Checking for missing values
+length(which(is.na.data.frame(complete_df)))
+# No missing value present
+```
+```{r}
+table(complete_df$Administrative)
+plot(table(complete_df$Administrative))
+```
+```{r}
+# Checking the unique values of distinct values in the original table with missing valuess
+original<-unique(customer_df$Administrative)
+# Checking the imputed values
+customer_df_full$imp$Administrative
+# Checking the new value
+imputed<-unique(complete_df$Administrative)
+```
+```{r}
+boxplot(original,imputed,main="Checking for distribution of original vs imputed",xlab="original and imputed",ylab="Distribution within set")
+# No outlier detected within the column. that confirms the plausibility of the imputed values
+```
+```{r}
+# Checking the unique values of distinct values in the original table with missing valuess
+original_ex<-unique(customer_df$ExitRates)
+# Checking the imputed values
+customer_df_full$imp$ExitRates
+# Checking the new value
+imputed_ex<-unique(complete_df$ExitRates)
+```
+```{r}
+# Checking the distibution between the original with null values and the imputed values to chack for similarity
+boxplot(original_ex,imputed_ex,main="Checking for distribution of original vs imputed",xlab="original and imputed",ylab="Distribution within set")
+```
+### Checking for Outliers and anomalies
+
+```{r}
+# Rechecking the clean and complete dataset
+head(complete_df)
+```
+
+### Numerical varables
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
 
 
