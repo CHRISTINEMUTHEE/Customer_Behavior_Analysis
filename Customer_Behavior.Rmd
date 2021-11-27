@@ -2,7 +2,9 @@
 title: "Customer_Behavior"
 author: "Christine Muthee"
 date: "11/26/2021"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -44,11 +46,6 @@ str(customer_df)
 dim(customer_df)
 # My dataset has 12330 rows and 18 columns.
 ```
-```{r}
-
-
-```
-
 ## 6.) Cleaning data
 
 ### Duplicated values
@@ -119,23 +116,23 @@ plot(table(complete_df$Administrative))
 ```
 ```{r}
 # Checking the unique values of distinct values in the original table with missing valuess
-original<-unique(customer_df$Administrative)
+original<-customer_df$Administrative
 # Checking the imputed values
 customer_df_full$imp$Administrative
 # Checking the new value
-imputed<-unique(complete_df$Administrative)
+imputed<-complete_df$Administrative
 ```
 ```{r}
 boxplot(original,imputed,main="Checking for distribution of original vs imputed",xlab="original and imputed",ylab="Distribution within set")
-# No outlier detected within the column. that confirms the plausibility of the imputed values
+# The distribution is similar, that confirms the plausibility of the imputed values
 ```
 ```{r}
-# Checking the unique values of distinct values in the original table with missing valuess
-original_ex<-unique(customer_df$ExitRates)
+# Checking the unique values of distinct values in the original table with missing values
+original_ex<-customer_df$ExitRates
 # Checking the imputed values
 customer_df_full$imp$ExitRates
 # Checking the new value
-imputed_ex<-unique(complete_df$ExitRates)
+imputed_ex<-complete_df$ExitRates
 ```
 ```{r}
 # Checking the distibution between the original with null values and the imputed values to chack for similarity
@@ -151,8 +148,74 @@ head(complete_df)
 ### Numerical varables
 
 ```{r}
+# Rechecking numeric datatypes
+str(complete_df)
+```
+### A function to plot a box plot for numerical values and detect outliers 
+```{r}
+# Boxplot of the individual variables
+box_plot<-function(data,var,main){
+  boxplot(data[[var]],ylab="Distribution of values",main=main)
+}
+```
+
+#### a.) 
+```{r}
+#  A box plot of Administrative distribution
+box_plot(complete_df,1,"A box plot of the distribution of Administrative page")
 
 ```
+```{r}
+box_plot(complete_df,2,"A box plot of the distribution of Administrative Duration")
+```
+```{r}
+box_plot(complete_df,3,"A box plot of the distribution of Informational page")
+```
+```{r}
+box_plot(complete_df,4,"A box plot of the distribution of Informational Duration")
+```
+```{r}
+box_plot(complete_df,5,"A box plot of the distribution of Product Related page")
+```
+```{r}
+box_plot(complete_df,6,"A box plot of the distribution of Product Related Duration")
+```
+
+```{r}
+box_plot(complete_df,7,"A box plot of the distribution of Bounce Rates")
+```
+
+```{r}
+box_plot(complete_df,8,"A box plot of the distribution of Exit Rates")
+```
+```{r}
+box_plot(complete_df,9,"A box plot of the distribution of Page Values")
+```
+
+
+
+```{r}
+box_plot(complete_df,10,"A box plot of the distribution of Special Days")
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+Density plot
+```{r}
+density_plot<-function(data,var,main){
+  densityplot(data[[var]],ylab="Distribution of values",main=main)
+}
+```
+
+
+
+
 
 
 
