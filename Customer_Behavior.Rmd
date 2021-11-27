@@ -537,13 +537,64 @@ ggplot(complete_df,
   labs(title = "Special days relationship with months")
 # May and Feb seem to have high special day rates. 
 ```
+### Multivariate analysis
+
+```{r}
+str(complete_df)
+```
+# Converting the strings to numeric columns to enable clustering is introducting alot of null values thus in this scope i will work with numerical columns
+
+## 8.) Implementing the solution
+```{r}
+# Selecting my features.
+str(num_complete)
+feat<-num_complete[,c(1,3,5,7,9,10)]
+# These are the numeric features
+# Selecting the labels
+label<-complete_df[,"Revenue"]
+feat
+```
+### Normalization of all the numerical features using the maxmin method
+```{r}
+normalize <- function(x){
+  return ((x-min(x)) / (max(x)-min(x)))
+}
+```
 
 
 ```{r}
+# Scaling the features
+normal_features<-normalize(feat)
+summary(normal_features)
+```
+```{r}
+result<-kmeans(normal_features,5,iter.max = 10)
+# Visualizing the result
+fviz_cluster(result,data=normal_features)
+# This visual is a bit hard to inteprate.Using the elbow method to obtain the optimum number of clusters to use.
+```
+```{r}
+# Elbow method to point me to the best number of clusters to use
+fviz_nbclust(x=normal_features,FUNcluster = kmeans,method="silhouette")
+# 2 is the best clustering number to use
+```
+```{r}
+result1<-kmeans(normal_features,2,iter.max = 5)
+# Visualizing the result
+fviz_cluster(result1,data=normal_features)
+# Clusters are still overlapping. The Kmeans is hard to interpret epecially when used with lots of datasets
+```
+## Hierarchical clustering
+This clustring has an advantage of letting us be free with the number of clusters to choose. Its less messy as compared to Kmeans and easily interpretable
+```{r}
+?hclust
 ```
 
-```{r}
-```
+
+
+
+
+
 
 
 
