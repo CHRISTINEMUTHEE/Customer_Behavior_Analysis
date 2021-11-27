@@ -403,20 +403,78 @@ density_plot(complete_df,9,"Distribution of Page values")
 density_plot(complete_df,10,"Distribution of Special day proximity")
 # Very few sites are close to special days. We will see their relationship with the months in bivariate analysis.
 ```
+```{r}
+?barplot
+```
 
+### Discrete Variables
+```{r}
+barplot(table(complete_df$Month),main="Distribution of months",col = "blue",ylab = "count of visitors")
+# May has the highest visitors while February has the lowest count of users. That is an interesting discovery.
+```
 
 ```{r}
+barplot(table(complete_df$VisitorType),main="Distribution of Visitor Type",col = "blue",ylab = "Count of visitors")
+# Returning customers are higher in count than new customers. 
+```
+```{r}
+# Weekday status distribution
+barplot(table(complete_df$Weekend),main="Weekend status",col = "blue",ylab = "Visitor count")
+# More users tend to visit the site during the weekdays as compared to weekends 
+```
+
+```{r}
+# Here we get to determine whether the users boil down to out traffic or not
+barplot(table(complete_df$Revenue),main="Revenue Status",col = "blue",ylab = "Visitor count")
+# Our users are not translating their activity on site to revenue, which is the main reason for our  analysis. Taking a deeper look at our analysis we wll know who generates more revenue and why we are not generating revenue generaly.
+```
+### Bivariate analysis
+
+#### Numerical- Numerical
+
+```{r}
+# Fishing out numerical columns to assess their correlation
+library("dplyr") 
+num_complete<-select_if(complete_df,is.numeric)
+str(num_complete)
+```
+```{r}
+# Assessign the correlation
+library(corrplot)
+corrplot(cor(num_complete),method = "circle",type="upper")
+# There is generally a high correlation between the site pages and their duration.
+# There can be seen to be a slightly negative correlation between administrative pages visited and exit rate. The columns that i will visualize are those with a correlation between the whether positive or negative.
+```
+#### It is inevitably exciting how these number reveal relationships.
+* There is a considerable positive relationship between pages and their duration meaning there is a corresponding increase in duration when there is a rise in the pages visited, Which we would expect as the more we flip into a page the more time we get to spend on the same page. This transcends to (administration,Informational and product related pages).
+* Another positive correlation is seen in the Exit rates and bounce rates. As i had explained earlier the higher the exit rate the higher the chances that that is the user's last page. This would eventually cause them to bounce or leave the site.Very interesting discovery.
+* An interestingly negative correlation is seen in the exit rates and the administrative page. It leads me to thinking that probably the administrative page is the first we encounter on a sight and thus the more the administrative pages the less likely it is that that is the users last page.
+
+```{r}
+# Plotting these to see relationships
+plot(complete_df$BounceRates,complete_df$ExitRates,main="Relationship between Bounce rates and Exit rates",col = "blue",xlab = "Bounce rates",ylab = "Exit rates")
+# As was explained by the correlation map. The relationship is linear and positive.
+```
+```{r}
+# Because there was a linear correlation we need to see the relationship between administrative and exit rate
+plot(complete_df$Administrative,complete_df$ExitRates,main="Relationship between Administration and Exit rates",col = "blue",xlab = "Administrative Page",ylab = "Exit rates")
+# As expected the relationship is inversely corresponding which leads me to thinking its the first page we encounter when we get into the sight. 
+```
+# Numerical_Categorical
+
+```{r}
+complete_df$Revenue<-ifelse(complete_df$Revenue==1,"TRUE","FALSE")
+complete_df$Weekend<-ifelse(complete_df$Weekend==1,"TRUE","FALSE")
+str(complete_df)
 ```
 
 
-
 ```{r}
-```
-
-
-
-```{r}
-table(complete_df$Month)
+ggplot(complete_df, 
+       aes(x = PageValues,
+           fill =Revenue)) +
+  geom_density(alpha = 0.4) +
+  labs(title = "Bounce rate distribution and revenue status")
 ```
 
 
