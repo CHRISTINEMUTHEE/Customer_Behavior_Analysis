@@ -8,5 +8,21 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+# Kira Plastinina Product analysis
+
+## 1.Objective: 
+
+### a.)Understanding Customer Behavior.
+### b.) Understanding the characteristics of customer groups.
+
+## 2.Problem Statement
+
+#### Businesses in this day and time have learnt the power of leveraging data for product optimization and also to channel resources where they are needed. Unorthodox methods of marketing and assessing customer behavior based on gut feeling and guesses have led to losses in companies and also many have lost customers to companies that understand their customers in a deeper level.In this scope of analysis we will delve in understanding customer behavior and cluster them to groups for optimum product development through effective marketing strategies.
+
+```{r}
+library(data.table)
+customer_df<-fread("http://bit.ly/EcommerceCustomersDataset")
+head(customer_df)
+```
 
 
