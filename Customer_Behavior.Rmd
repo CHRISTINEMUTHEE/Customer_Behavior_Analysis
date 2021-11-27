@@ -337,14 +337,83 @@ unique(complete_df$Region)
 unique(complete_df$TrafficType)
 # No anomalies detected
 ```
-## 7.) Exploratory data Analysis
+## 7.) Exploratory data Analysis.
 
-Density plot
+### a.) Univariate Analysis.
+
+Numerical Continuous values
+
+A function to plot Density plot
 ```{r}
 density_plot<-function(data,var,main){
-  densityplot(data[[var]],ylab="Distribution of values",main=main)
+  plot(density(data[[var]]),ylab="Density of visitors",main=main)
+  polygon(density(data[[var]]),col = "blue",border="red")
 }
 ```
+
+```{r}
+# Administrative plots
+density_plot(complete_df,1,"Distribution of visitors in Administration page")
+# The distribution of the number of pages visited in the administration section of the site
+# The  distribution is not gausian. The values are skewed to the left indicating many visitors dont visit many pages in the administration pages. The same is expected to be reflected in the duration distribution
+```
+```{r}
+# Duration distribution
+density_plot(complete_df,2,"Distribution of Duration per Administration page")
+# Time spent in the administration pages is skewed to the left. Most visitors dont spent time here.
+```
+```{r}
+# Informative page distribution
+density_plot(complete_df,3,"Distribution of vistors in informative pages")
+# The distribution is multi modal but skewed to the left as many people don't visit informative pages but they are considerably more than those who visit the admin pages. Some people go to as far as 25 pages in information
+```
+```{r}
+# Informative page distribution
+density_plot(complete_df,4,"Distribution of time spent in informative pages")
+# The distribution is skewed to to left and time spent is seen to be on the lower side
+```
+```{r}
+# Product page distribution
+density_plot(complete_df,5,"Distribution of visitors on Product related pages")
+# Though skewed to the left. The number of people is considerable higher than the rest of the pages. The product seem to be very concentrated as pages go to as high as 700 .
+```
+```{r}
+# Product page distribution
+density_plot(complete_df,6,"Distribution of time spent on Product related pages")
+# This is also skewed to the left meaning its concentrated on the lower end. We however have visitors spending as much as 60,000 units(unspecified) of time on the product related page
+```
+
+```{r}
+# Distribution of Bounce rates
+density_plot(complete_df,7,"Distribution of Bounce rates")
+# Alot of users don't bounce off the site as soon as they visit it as the rate is skewed to the left. We have a few individuals however who bounce off site considerably at a rate of 20 % .
+```
+```{r}
+# Distribution of Exit rates. calculated by (pages visited/ Total pages)
+density_plot(complete_df,8,"Distribution of Exit rates")
+# The distribution is fairly gausian with irregular mode values. The highest rate however is on the lower side.This could only mean that many people peruse more pages of our site, especially considering the denisty of pages in the product related site. Its important to note that the exit rate can be used to denote the likelihood of the page being the last. The higher the rate the higher the chances of that particular page being the page being the last. We will however view this in the bi-variate analysis while assessing its relation with other variables.
+```
+```{r}
+# Distribution of Page values
+density_plot(complete_df,9,"Distribution of Page values")
+# This is the average value of a webpage that a user visited before making a complete transaction. The higher the page value the higher the rate of complete transactions
+```
+```{r}
+# Distribution of Special days- closeness of a sites visiting time to a special day
+density_plot(complete_df,10,"Distribution of Special day proximity")
+# Very few sites are close to special days. We will see their relationship with the months in bivariate analysis.
+```
+
+
+```{r}
+```
+
+
+
+```{r}
+```
+
+
 
 ```{r}
 table(complete_df$Month)
