@@ -163,48 +163,181 @@ box_plot<-function(data,var,main){
 ```{r}
 #  A box plot of Administrative distribution
 box_plot(complete_df,1,"A box plot of the distribution of Administrative page")
-
+# This represent the number of administrative pages visited by a visited in that session.
+# Most customers visited less than 5 administrative sites. It is also possible for them to visit more than 25 pages . This set wont be treated as an outlier. Users if this page could be actual administrators and maybe customers.
+```
+#### Checking the extent of outliers
+```{r}
+# Viewing the distribution of outliers
+outs<-boxplot.stats(complete_df$Administrative)$out
+print(length(outs))
+plot(outs,main="Administration of Outliers",col="blue")
+# 404 data points are considered outliers out of the 12,330 points.
 ```
 ```{r}
 box_plot(complete_df,2,"A box plot of the distribution of Administrative Duration")
+# The outliers present here are absolutely extreme. Its however important to note that time spent on site could be in seconds thus 3600 translates to an hour. Thus , for now, the data wont be treated as an outlier. Users of this page could be users on an admininstrative levels and can validly spend time there.
 ```
 ```{r}
+# Checking for the count of outliers
+outs1<-boxplot.stats(complete_df$Administrative_Duration)$out
+print(length(outs1))
+# This are too many to be removed
+```
+
+```{r}
+# Outlier detection in admin pages and duration
+min(complete_df$Administrative)
+min(complete_df$Administrative_Duration)
+max(complete_df$Administrative_Duration)
+# -1 for a duration is an illegitimate data point thus this anomaly will be dealt with by imputing them with values given from their quantile distribution
+```
+#### Dealing with the outliers in the Admin duration column
+```{r}
+# # Getting the 1st and 3rd quantile in the admin duration column 
+# qnt<-quantile(complete_df$Administrative_Duration,probs = c(0.25,0.75),na.rm = T)
+# # My replacements. the values falling 1.5 times less of the 1st quantile will be replaced by values in the 5th percentile and those that are 1.5 times more than the 3rd quantile will be replaced by the value in the 95th percentile 
+# caps<-quantile(complete_df$Administrative_Duration,probs = c(0.05,0.95),na.rm = T)
+# # The threshhold
+# 
+# thresh<-1.5*IQR(complete_df$Administrative_Duration,na.rm = T)
+# # Replacing
+# complete_df$Administrative_Duration[complete_df$Administrative_Duration<(qnt[1]-thresh)]<-caps[1]
+# complete_df$Administrative_Duration[complete_df$Administrative_Duration>(qnt[2]+thresh)]<-caps[2]
+```
+
+#### Rechecking the minimum value
+```{r}
+min(complete_df$Administrative_Duration)
+#max(complete_df$Administrative_Duration)
+```
+#### The operation to remove the lower quantile of outliers did not change the minimum from -1 and replacing the values past the 3rd quantile drops them to lower then 300. This greately tampers with the actual distribution of the data.
+
+
+```{r}
+# Informational pages
 box_plot(complete_df,3,"A box plot of the distribution of Informational page")
+# The pages visited vary from 0 to 20 . The points stated as outliers will be treated as legitimate points because informational pages can genuinely be 20 . Its however evident that most people dont spent time in the informational page
 ```
 ```{r}
+out2<-boxplot.stats(complete_df$Informational)$out
+print(length(out2))
+# These are too many to be removed. They wont be replaced as id consider them legitimate datapoints
+```
+
+```{r}
+# Checking for outliers in the time spent in the informational page
 box_plot(complete_df,4,"A box plot of the distribution of Informational Duration")
+# As stated formaly in the administrative duration the units could be small enough and time is a continously growing variable thus will not be removed
+```
+
+```{r}
+box_plot(complete_df,5,"A box plot of the distribution of Product Related pages")
+# Depending on the amount of product this e commerce website seem to have a lot of pages. Its extreeme to have 700 pages visited per session but considering that some visitors rarely log out of these pages .
 ```
 ```{r}
-box_plot(complete_df,5,"A box plot of the distribution of Product Related page")
-```
-```{r}
+# Duration spent per page
 box_plot(complete_df,6,"A box plot of the distribution of Product Related Duration")
+# The high numbers stated here are totally valid as this time is measured per page and considering that these pages are alot the time spent on each page would considerable be expected to be high.
+```
+```{r}
+# Checking for an anomaly in product duration
+min(complete_df$ProductRelated_Duration)
+# This is an anomaly to be dealt with
 ```
 
+
 ```{r}
+# Distribution of bounce rates.These are the % of visitors who enter the site and then drop off without trigering any request.
 box_plot(complete_df,7,"A box plot of the distribution of Bounce Rates")
+# They vary from 0 to 20 %. The points are genuine thus will not be eliminated.
+```
+```{r}
+min(complete_df$BounceRates)
 ```
 
+
 ```{r}
+# % of considerably last session
 box_plot(complete_df,8,"A box plot of the distribution of Exit Rates")
+# The higher the exit rate, the more likely it is for one to leave the session.
 ```
 ```{r}
+min(complete_df$ExitRates)
+```
+
+```{r}
+# Page value for a webpage that a user visited before completing the e commerce transaction. 
 box_plot(complete_df,9,"A box plot of the distribution of Page Values")
+# Its interesting to discover that page value range from 0 to more than 300. The choice NOT to remove the product pages now tottaly makes sense.
 ```
 
 
 
 ```{r}
+# These is the closeness of the site visiting time to a special day
 box_plot(complete_df,10,"A box plot of the distribution of Special Days")
+# Its maximum when we are close to a special day and close to 1 and minimum when not close to a soecial day (0).
+```
+#### Wr can therefore conclude from the outliers that.
+* The pages visited depend on the content posted in the e commerce website. The extreme values detected thus cannot be treated as outliers.
+* A challenge can however be seen in minimum durations being - 1 and thus can be treated as outliers and will be handles by replacing them by zero since imputation by quantile values did not work.
+
+### Dealing with anomalies
+```{r}
+# Replacing duration of -1 with zero
+complete_df[complete_df$Administrative_Duration==-1,"Administrative_Duration"]<-0
+# Confirming the operation
+min(complete_df$Administrative_Duration)
+```
+```{r}
+complete_df[complete_df$Informational_Duration==-1,"Informational_Duration"]<-0
+# Confirming the operation
+min(complete_df$Informational_Duration)
+```
+```{r}
+complete_df[complete_df$ProductRelated_Duration==-1,"ProductRelated_Duration"]<-0
+# Confirming the operation
+min(complete_df$ProductRelated_Duration)
+```
+### Outlier or anomaly detection in Discrete values
+```{r}
+unique(complete_df$Month)
+# We don't have the month of January and April. That's an anomaly that we are constrained on replacing for this scope of the analysis
+```
+
+
+
+```{r}
+# Checking for anomalies in the visitor type page
+unique(complete_df$VisitorType)
+# There are three categories Regulars,New_visitors and other who i would consider to be developers or administrators etc
+```
+```{r}
+# Weekday weekend status
+unique(complete_df$Weekend)
+# No anomaly detected
 ```
 
 
 ```{r}
+# Revenue status
+unique(complete_df$Revenue)
+# No anomaly detected. I would however guess that this are the users that add revenue into the company.
 ```
-
-
 ```{r}
+# Checking for outliers in the OS,Browser, and traffic type columns
+unique(complete_df$OperatingSystems)
+# No anomaly detected. This would be considered ad the different types of operating systems used.
 ```
+```{r}
+# Checking for anomalies in the browser type and region factors
+unique(complete_df$Browser)
+unique(complete_df$Region)
+unique(complete_df$TrafficType)
+# No anomalies detected
+```
+## 7.) Exploratory data Analysis
 
 Density plot
 ```{r}
@@ -212,6 +345,11 @@ density_plot<-function(data,var,main){
   densityplot(data[[var]],ylab="Distribution of values",main=main)
 }
 ```
+
+```{r}
+table(complete_df$Month)
+```
+
 
 
 

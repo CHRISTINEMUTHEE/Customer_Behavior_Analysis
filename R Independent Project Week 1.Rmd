@@ -485,7 +485,6 @@ my_model3<-tune(svm,Clicked~ .,data = training_set,
                 preProcess=c("center","scale"),
                 ranges=list(cost=c(0.001,0.01,0.1,1,5,10,100),gamma=c(0.5,1,2,3,4)),
                 trControl=control,verbose=FALSE)
-
 best_model<-my_model3$best.model
 best_model
 ```
