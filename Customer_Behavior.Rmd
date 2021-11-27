@@ -463,19 +463,89 @@ plot(complete_df$Administrative,complete_df$ExitRates,main="Relationship between
 # Numerical_Categorical
 
 ```{r}
-complete_df$Revenue<-ifelse(complete_df$Revenue==1,"TRUE","FALSE")
-complete_df$Weekend<-ifelse(complete_df$Weekend==1,"TRUE","FALSE")
+# Rechecking the datatypes
 str(complete_df)
+```
+```{r}
+# Assessing the proportion of true and false
+table(complete_df$Revenue)
+```
+What are the factors that directly affect the revenue status of the e-commerce site?
+
+```{r}
+ggplot(complete_df, 
+       aes(x = Administrative,
+           fill =Revenue)) +
+  geom_density(alpha = 0.4) +
+  labs(title = "Administrative page distribution with revenue status")
+# Since we can see the distribution of administrative pages and revenue status. It is evident that when the pages are less, the revenue is densly  populated in the FALSE meaning that at less administrative pages the revenue is mostly at false status. A paradigm shift is seen at higher pages where the revenue status is true
+```
+```{r}
+ggplot(complete_df, 
+       aes(x = Administrative_Duration,
+           fill =Revenue)) +
+  geom_density(alpha = 0.4) +
+  labs(title = "Duration in administrative page's relationship with revenue status")
+# The status is the same as the correlation is positive. 
+```
+```{r}
+ggplot(complete_df, 
+       aes(x = ProductRelated,
+           fill =Revenue)) +
+  geom_density(alpha = 0.4) +
+  labs(title = "Product related page relationship with revenue status")
+# The product related page poses a clear relationship with revenue status. This clearly shows that as one moves more in the product related pages the count of TRUE revenues increase.
+
 ```
 
 
 ```{r}
+# The relationship between bounce rates and revenue
+ggplot(complete_df, 
+       aes(x = BounceRates,
+           fill =Revenue)) +
+  geom_density(alpha = 0.4) +
+  labs(title = "Bounce rate's relationship with revenue status")
+# It is evident that the less bounce rates translate to TRUE revenues and more bounce rates translate to NO /FALSE revenues.
+```
+
+
+```{r}
+# The relationship between exit rates and revenue
+ggplot(complete_df, 
+       aes(x = ExitRates,
+           fill =Revenue)) +
+  geom_density(alpha = 0.4) +
+  labs(title = "Exit rate's relationship with revenue status")
+# Low exit rate means that the visitor is less likely to be in their last page and thus the status is populated at TRUE unlike when the exit rate is high which means that the probability of being in their last page is high thus the revenue status is false
+```
+```{r}
+# Relationship between page value and revenue status. Since the page value is the average value of the page a user visited before completing a transaction
 ggplot(complete_df, 
        aes(x = PageValues,
            fill =Revenue)) +
   geom_density(alpha = 0.4) +
-  labs(title = "Bounce rate distribution and revenue status")
+  labs(title = "Page Value's relationship with revenue status")
+# Higher page values translate to a TRUE revenue.
 ```
+What are the months that the special day rate is high
+```{r}
+ggplot(complete_df, 
+       aes(x = SpecialDay,
+           y=Month)) +
+  geom_boxplot() +
+  labs(title = "Special days relationship with months")
+# May and Feb seem to have high special day rates. 
+```
+
+
+```{r}
+```
+
+```{r}
+```
+
+
 
 
 
